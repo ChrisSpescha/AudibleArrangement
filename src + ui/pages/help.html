@@ -1,0 +1,33 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+
+<template>
+    <div class="container template" id="help-template" data-tab="help">
+
+        <p>This is the help page</p>
+                  <!-- Page Header -->
+            <div class="overlay"></div>
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                  <div class="page-heading">
+                    <h1>Register</h1>
+                    <span class="subheading">Buy and sell goods instantly</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-8 col-md-10 mx-auto">
+                {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+              </div>
+            </div>
+          </div>
+            </div>
+</template>
+
+{% endblock %}

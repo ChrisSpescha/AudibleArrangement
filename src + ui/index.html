@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Electron Application with Multiple Pages</title>
+    <!-- <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="import" href="pages/main.html">
+    <link rel="import" href="pages/settings.html">
+    <link rel="import" href="pages/contact.html">
+    <link rel="import" href="pages/help.html">
+    <style>
+        .nav-pills>a.active {
+            background-color: #f30bf3 !important;
+            color: #ffffff !important;
+        }
+
+        .nav-pills>a:hover {
+            color: #ffffff !important;
+        }
+
+        .nav-link-color {
+            color: #ffffff;
+        }
+
+                body {
+            overflow: hidden;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <div class="container my-4">
+        <div class="row">
+            <div class="col-2">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active" id="main-tab" data-toggle="pill" href="#main" role="tab" aria-controls="main" aria-selected="true">Main</a>
+                    <a class="nav-link" id="settings-tab" data-toggle="pill" href="#settings" role="tab" aria-controls="settings" aria-selected="false">Settings</a>
+                    <a class="nav-link" id="help-tab" data-toggle="pill" href="#help" role="tab" aria-controls="help" aria-selected="false">Help</a>
+                    <a class="nav-link" id="contact-tab" data-toggle="pill" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
+                </div>
+            </div>
+            <div class="col-10">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="main" role="tabpanel" aria-labelledby="main-tab"></div>
+                    <div class="tab-pane fade" id="help" role="tabpanel" aria-labelledby="help-tab"></div>
+                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab"></div>
+                    <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio src="track.mp3" controls></audio>
+
+    <div class="visualizer-container"></div>
+
+    <script>
+        const links = document.querySelectorAll('link[rel="import"]');
+        links.forEach((link) => {
+            let template = link.import.querySelector('template');
+            let clone = document.importNode(template.content, true);
+            let target = clone.querySelector(".template").dataset.tab;
+            document.getElementById(target).appendChild(clone);
+        });
+
+        window.$ = window.jquery = require("jquery");
+        window.popper = require("popper.js");
+        require("bootstrap");
+        require('./renderer.js')
+
+    </script>
+</body>
+
+</html>
