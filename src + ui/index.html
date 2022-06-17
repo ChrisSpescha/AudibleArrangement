@@ -58,19 +58,7 @@
 
     <div class="visualizer-container"></div>
 
-    <script>
-        const links = document.querySelectorAll('link[rel="import"]');
-        links.forEach((link) => {
-            let template = link.import.querySelector('template');
-            let clone = document.importNode(template.content, true);
-            let target = clone.querySelector(".template").dataset.tab;
-            document.getElementById(target).appendChild(clone);
-        });
-
-        window.$ = window.jquery = require("jquery");
-        window.popper = require("popper.js");
-        require("bootstrap");
-        require('./renderer.js')
+    <script src="app.js">
 
     </script>
 </body>

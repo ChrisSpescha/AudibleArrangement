@@ -1,7 +1,4 @@
-{% extends 'bootstrap/base.html' %}
-{% import "bootstrap/wtf.html" as wtf %}
 
-{% block content %}
 
 <template>
     <div class="container template" id="help-template" data-tab="help">
@@ -19,15 +16,41 @@
                 </div>
               </div>
             </div>
-
-          <div class="container">
-            <div class="row">
-              <div class="col-lg-8 col-md-10 mx-auto">
-                {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
-              </div>
+<main class="container-fliud">
+        <div class="row">
+            <div class="col-md-6 p-4 my-auto">
+                <form class="card card-body" id="myform" action="{{ url_for('register')}}" method="post">
+                    <div class="form-group">
+                        <input
+                        type="text"
+                        id="name"
+                        placeholder="Please Enter Name"
+                        name="name"
+                        >
+                        <input
+                        type="text"
+                        id="password"
+                        placeholder="Please Enter Password"
+                        name="password"
+                        >
+                        <input
+                        type="text"
+                        id="email"
+                        placeholder="Please Enter Email"
+                        name="email"
+                        >
+                    </div>
+                    <button class="btn btn-success">Save</button>
+                </form>
             </div>
-          </div>
+
+            <div class="col-md-6">
+                <div id="articles">
+
+                </div>
+            </div>
+        </div>
+    </main>
             </div>
 </template>
 
-{% endblock %}
