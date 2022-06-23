@@ -4,6 +4,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from forms import RegisterForm, LoginForm
 from datetime import datetime
+from flask_bootstrap import Bootstrap
+
 from flask_marshmallow import Marshmallow
 
 import psycopg2
@@ -15,6 +17,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+Bootstrap(app)
 
 
 # CONFIGURE Database
@@ -67,7 +72,30 @@ def register():
     db.session.add(new_user)
     db.session.commit()
     print(jsonify(new_user))
-    return users_schema.jsonify(new_user)
+    return redirect(url_for('login'))
+
+
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    email = request.json['email']
+    password = request.json['password']
+    if request.method == "POST":
+        user = User.query.filter_by(email=email).first()
+        # Email doesn't exist or password incorrect.
+        if not user:
+            flash("That email does not exist, please try again.")
+            return redirect(url_for('login'))
+        elif not check_password_hash(user.password, password):
+            flash('Password incorrect, please try again.')
+            return redirect(url_for('login'))
+        else:
+            login_user(user)
+            return render_template('poop.html')
+
+    print("got here first")
+    print(email)
+    print(password)
+    print("got here second")
 
     # form = RegisterForm()
     # if form.validate_on_submit():
