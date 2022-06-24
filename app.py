@@ -11,7 +11,7 @@ from flask_marshmallow import Marshmallow
 import psycopg2
 
 app = Flask(__name__)
-
+app.config['SECRET_KEY'] = 'thesecretest'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:2020@localhost:5432/postgres'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -20,6 +20,11 @@ ma = Marshmallow(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 Bootstrap(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 
 # CONFIGURE Database
@@ -34,21 +39,19 @@ class User(UserMixin, db.Model):
 db.create_all()
 
 
-# class ArticleSchema(ma.Schema):
-#     class Meta:
-#         fields = ('id', 'email', 'password', 'name')
-
-# article_schema = ArticleSchema()
-# articles_schema = ArticleSchema(many=True)
-
-
 class UserSchema(ma.Schema):
     class Meta:
         fields = ('id', 'email', 'password', 'name')
 
 
+class LoginSchema(ma.Schema):
+    class Meta:
+        fields = ('email', 'password')
+
+
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
+login_schema = LoginSchema()
 
 
 @app.route('/register', methods=["GET", "POST"])
@@ -56,12 +59,7 @@ def register():
     name = request.json['name']
     email = request.json['email']
     password = request.json['password']
-
-    print("got here first")
-
-    print(name)
-    print(email)
-    print(password)
+    print(name, email, password)
     new_user = User(
                 email=email,
                 password=password,
@@ -71,31 +69,30 @@ def register():
 
     db.session.add(new_user)
     db.session.commit()
-    print(jsonify(new_user))
-    return redirect(url_for('login'))
+    print('new user created successfully')
+    return users_schema.jsonify(new_user)
 
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
     email = request.json['email']
-    password = request.json['password']
-    if request.method == "POST":
-        user = User.query.filter_by(email=email).first()
-        # Email doesn't exist or password incorrect.
-        if not user:
-            flash("That email does not exist, please try again.")
-            return redirect(url_for('login'))
-        elif not check_password_hash(user.password, password):
-            flash('Password incorrect, please try again.')
-            return redirect(url_for('login'))
-        else:
-            login_user(user)
-            return render_template('poop.html')
+    user = User.query.filter_by(email=email).first()
+    # Email doesn't exist or password incorrect.
+    if user:
+        login_user(user)
+        print('user logged in')
+        print(current_user.name)
+        return login_schema.jsonify(user)
+    print('here bitched')
+    return print(email)
 
-    print("got here first")
-    print(email)
-    print(password)
-    print("got here second")
+
+@app.route('/logout')
+def logout():
+    email = 'nice'
+    print('user logout')
+    logout_user()
+    return email
 
     # form = RegisterForm()
     # if form.validate_on_submit():
@@ -116,6 +113,10 @@ def login():
     #         name=form.name.data,
     #         password=hash_and_salted_password,
     #     )
+
+
+
+
 
 
 # @app.route('/add', methods=['GET', 'POST'])

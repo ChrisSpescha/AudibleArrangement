@@ -13,10 +13,14 @@ require('./renderer.js')
 
 
 const myform = document.getElementById('myform')
+const loginform = document.getElementById('loginform')
+
 const name = document.getElementById('name')
 const password = document.getElementById('password')
 const email = document.getElementById('email')
 
+const login_password = document.getElementById('login-password')
+const login_email = document.getElementById('login-email')
 
 const articles = document.getElementById('articles')
 
@@ -43,6 +47,13 @@ const renderOneItem = (mydata) => {
     userId = mydata.id
 }
 
+const renderLogin = (loginData) => {
+    login_email.value = loginData.email
+    login_password.value = loginData.password
+
+    userId = loginData.id
+}
+
 const insertData = (newData) => {
     fetch('http://127.0.0.1:5000/register', {
         method:'POST',
@@ -60,6 +71,7 @@ const insertData = (newData) => {
         .catch(error => console.log(error))
     }
 
+
 myform.addEventListener('submit', (e) => {
     e.preventDefault()
 
@@ -69,12 +81,42 @@ myform.addEventListener('submit', (e) => {
         name:name.value,
     }
     if(userId) {
-        updateData(userId, newData)
+        updateData(newData)
     } else {
         insertData(newData)
     }
     myform.reset()
 })
+
+const login = (loginData) => {
+    fetch('http://127.0.0.1:5000/login', {
+        method:'POST',
+         headers: {
+            'Content-Type': 'application/json'
+        },
+        body:JSON.stringify(loginData)
+    })
+    .then(console.log(loginData))
+    .then(console.log(resp))
+    .then(resp => resp.json())
+    .then((data) => {
+        console.log(data)
+    })
+}
+
+loginform.addEventListener('submit', (e) => {
+    e.preventDefault()
+
+    const userData = {
+        email:login_email.value,
+        password:login_password.value,
+    }
+    login(userData)
+
+    loginform.reset()
+})
+
+
 
 //getAllData()
 
@@ -112,31 +154,11 @@ myform.addEventListener('submit', (e) => {
 //
 //    }
 
-//const deleteData = (id) => {
-//    fetch(`http://127.0.0.1:5000/delete/${id}/` , {
-//        method:'DELETE',
-//         headers:{
-//            'Content-Type': 'application/json'
-//        }
-//    })
-//    getAllData()
-//}
 
 
 
-//const updateData = (articleId, mydata) => {
-//    fetch(`http://127.0.0.1:5000/update/${articleId}/`, {
-//        method:'PUT',
-//         headers: {
-//            'Content-Type': 'application/json'
-//        },
-//        body:JSON.stringify(mydata)
-//    })
-//    .then(resp => resp.json())
-//    .then(() => {
-//        getAllData()
-//    })
-//}
+
+
 
 
 

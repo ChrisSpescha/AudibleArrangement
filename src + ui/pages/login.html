@@ -1,7 +1,7 @@
 <template>
     <div class="container template" id="login-template" data-tab="login">
 
-        <p>This is the help page</p>
+        <p>This is the login page</p>
                   <!-- Page Header -->
             <div class="overlay"></div>
             <div class="container">
@@ -9,30 +9,30 @@
                 <div class="col-lg-8 col-md-10 mx-auto">
                   <div class="page-heading">
                     <h1>Register</h1>
-                    <span class="subheading">Buy and sell goods instantly</span>
+                    <span class="subheading">Welcome Back!</span>
                   </div>
                 </div>
               </div>
             </div>
-<main class="container-fliud">
+<main class="container-fluid">
         <div class="row">
             <div class="col-md-6 p-4 my-auto">
-                <form class="card card-body" id="myform" action="{{ url_for('register')}}" method="post">
+                <form class="card card-body" id="loginform" action="{{ url_for('login')}}" method="post">
                     <div class="form-group">
                         <input
                         type="text"
-                        id="password"
-                        placeholder="Please Enter Password"
-                        name="password"
-                        >
-                        <input
-                        type="text"
-                        id="email"
+                        id="login-email"
                         placeholder="Please Enter Email"
                         name="email"
                         >
+                        <input
+                        type="password"
+                        id="login-password"
+                        placeholder="Please Enter Password"
+                        name="password"
+                        >
                     </div>
-                    <button class="btn btn-success">Save</button>
+                    <button class="btn btn-success">Login</button>
                 </form>
             </div>
 
